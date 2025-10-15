@@ -1,0 +1,35 @@
+{
+	"common": {
+		"welcome": "Welcome",
+		"hello": "Hello",
+		"logout": "Logout",
+		"login": "Login",
+		"register": "Register",
+		"email": "Email",
+		"password": "Password",
+		"username": "Username",
+		"submit": "Submit",
+		"cancel": "Cancel",
+		"save": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"search": "Search",
+		"loading": "Loading...",
+		"error": "Error",
+		"success": "Success"
+	},
+	"auth": {
+		"loginTitle": "Login",
+		"registerTitle": "Create an account",
+		"forgotPassword": "Forgot password?",
+		"rememberMe": "Remember me",
+		"noAccount": "Don't have an account?",
+		"hasAccount": "Already have an account?",
+		"loginHere": "Login here",
+		"registerHere": "Register here"
+	},
+	"home": {
+		"title": "Home",
+		"description": "Welcome to our application"
+	}
+}

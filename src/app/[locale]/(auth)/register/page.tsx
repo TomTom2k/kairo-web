@@ -2,15 +2,26 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UserIcon, EnvelopeIcon, LockIcon } from '@/assets/icons';
+import { EnvelopeIcon, LockIcon, UserIcon } from '@/assets/icons';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function RegisterPage() {
+	const t = useTranslations('auth');
+	const tCommon = useTranslations('common');
+
 	return (
 		<motion.div
-			className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-auto'
+			className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-auto relative'
 			initial={{ opacity: 0, y: 50, scale: 0.9 }}
 			animate={{ opacity: 1, y: 0, scale: 1 }}
 			transition={{ duration: 0.6, ease: 'easeOut' }}>
+			{/* Language Switcher */}
+			<div className='absolute top-4 right-4'>
+				<LanguageSwitcher />
+			</div>
+
 			{/* Logo */}
 			<motion.div
 				className='flex justify-center mb-6'
@@ -39,7 +50,7 @@ export default function RegisterPage() {
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 0.3, duration: 0.5 }}>
-				Sign Up
+				{t('registerTitle')}
 			</motion.h1>
 
 			{/* Form */}
@@ -48,7 +59,7 @@ export default function RegisterPage() {
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				transition={{ delay: 0.4, duration: 0.5 }}>
-				{/* Name field */}
+				{/* Username field */}
 				<motion.div
 					className='relative'
 					initial={{ x: -50, opacity: 0 }}
@@ -61,7 +72,7 @@ export default function RegisterPage() {
 					</motion.div>
 					<motion.input
 						type='text'
-						placeholder='Full name'
+						placeholder={tCommon('username')}
 						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
@@ -81,7 +92,7 @@ export default function RegisterPage() {
 					</motion.div>
 					<motion.input
 						type='email'
-						placeholder='Email address'
+						placeholder={tCommon('email')}
 						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
@@ -101,78 +112,38 @@ export default function RegisterPage() {
 					</motion.div>
 					<motion.input
 						type='password'
-						placeholder='Password'
+						placeholder={tCommon('password')}
 						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
 					/>
 				</motion.div>
 
-				{/* Confirm Password field */}
-				<motion.div
-					className='relative'
-					initial={{ x: -50, opacity: 0 }}
-					animate={{ x: 0, opacity: 1 }}
-					transition={{ delay: 0.8, duration: 0.5 }}>
-					<motion.div
-						className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'
-						whileHover={{ scale: 1.1 }}>
-						<LockIcon className='h-5 w-5 text-gray-400' />
-					</motion.div>
-					<motion.input
-						type='password'
-						placeholder='Confirm password'
-						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
-						whileFocus={{ scale: 1.02 }}
-						transition={{ duration: 0.2 }}
-					/>
-				</motion.div>
-
-				{/* Sign up button */}
+				{/* Register button */}
 				<motion.button
 					type='submit'
 					className='w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200'
 					initial={{ y: 20, opacity: 0 }}
 					animate={{ y: 0, opacity: 1 }}
-					transition={{ delay: 0.9, duration: 0.5 }}
+					transition={{ delay: 0.8, duration: 0.5 }}
 					whileHover={{ scale: 1.05, y: -2 }}
 					whileTap={{ scale: 0.95 }}>
-					Sign Up
+					{tCommon('register')}
 				</motion.button>
 			</motion.form>
 
-			{/* Login link */}
+			{/* Sign in link */}
 			<motion.div
 				className='text-center mt-6'
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ delay: 1.0, duration: 0.5 }}>
-				<span className='text-gray-600'>or </span>
-				<motion.a
+				transition={{ delay: 0.9, duration: 0.5 }}>
+				<span className='text-gray-600'>{t('hasAccount')} </span>
+				<Link
 					href='/login'
-					className='text-blue-500 hover:text-blue-600 font-medium'
-					whileHover={{ scale: 1.1, color: '#2563eb' }}
-					whileTap={{ scale: 0.95 }}>
-					Login
-				</motion.a>
-			</motion.div>
-
-			{/* Terms */}
-			<motion.div
-				className='text-center mt-4'
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ delay: 1.1, duration: 0.5 }}>
-				<p className='text-gray-400 text-sm'>
-					By signing up, you agree to our{' '}
-					<motion.a
-						href='#'
-						className='text-blue-500 hover:text-blue-600'
-						whileHover={{ scale: 1.05, color: '#2563eb' }}
-						whileTap={{ scale: 0.95 }}>
-						Terms of Service
-					</motion.a>
-				</p>
+					className='text-blue-500 hover:text-blue-600 font-medium'>
+					{t('loginHere')}
+				</Link>
 			</motion.div>
 		</motion.div>
 	);

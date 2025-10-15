@@ -1,0 +1,35 @@
+{
+	"common": {
+		"welcome": "Chào mừng",
+		"hello": "Xin chào",
+		"logout": "Đăng xuất",
+		"login": "Đăng nhập",
+		"register": "Đăng ký",
+		"email": "Email",
+		"password": "Mật khẩu",
+		"username": "Tên người dùng",
+		"submit": "Gửi",
+		"cancel": "Hủy",
+		"save": "Lưu",
+		"delete": "Xóa",
+		"edit": "Chỉnh sửa",
+		"search": "Tìm kiếm",
+		"loading": "Đang tải...",
+		"error": "Lỗi",
+		"success": "Thành công"
+	},
+	"auth": {
+		"loginTitle": "Đăng nhập",
+		"registerTitle": "Đăng ký tài khoản",
+		"forgotPassword": "Quên mật khẩu?",
+		"rememberMe": "Ghi nhớ đăng nhập",
+		"noAccount": "Chưa có tài khoản?",
+		"hasAccount": "Đã có tài khoản?",
+		"loginHere": "Đăng nhập tại đây",
+		"registerHere": "Đăng ký tại đây"
+	},
+	"home": {
+		"title": "Trang chủ",
+		"description": "Chào mừng đến với ứng dụng của chúng tôi"
+	}
+}

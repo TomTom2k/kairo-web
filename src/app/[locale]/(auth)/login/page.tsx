@@ -3,14 +3,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { EnvelopeIcon, LockIcon } from '@/assets/icons';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function LoginPage() {
+	const t = useTranslations('auth');
+	const tCommon = useTranslations('common');
+
 	return (
 		<motion.div
-			className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-auto'
+			className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-auto relative'
 			initial={{ opacity: 0, y: 50, scale: 0.9 }}
 			animate={{ opacity: 1, y: 0, scale: 1 }}
 			transition={{ duration: 0.6, ease: 'easeOut' }}>
+			{/* Language Switcher */}
+			<div className='absolute top-4 right-4'>
+				<LanguageSwitcher />
+			</div>
+
 			{/* Logo */}
 			<motion.div
 				className='flex justify-center mb-6'
@@ -39,7 +50,7 @@ export default function LoginPage() {
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 0.3, duration: 0.5 }}>
-				Login
+				{t('loginTitle')}
 			</motion.h1>
 
 			{/* Form */}
@@ -61,7 +72,7 @@ export default function LoginPage() {
 					</motion.div>
 					<motion.input
 						type='email'
-						placeholder='audrey_weimann@anissa.org'
+						placeholder={tCommon('email')}
 						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
@@ -81,7 +92,7 @@ export default function LoginPage() {
 					</motion.div>
 					<motion.input
 						type='password'
-						placeholder='password'
+						placeholder={tCommon('password')}
 						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
@@ -97,7 +108,7 @@ export default function LoginPage() {
 					transition={{ delay: 0.7, duration: 0.5 }}
 					whileHover={{ scale: 1.05, y: -2 }}
 					whileTap={{ scale: 0.95 }}>
-					Login
+					{tCommon('login')}
 				</motion.button>
 			</motion.form>
 
@@ -107,14 +118,12 @@ export default function LoginPage() {
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				transition={{ delay: 0.8, duration: 0.5 }}>
-				<span className='text-gray-600'>or </span>
-				<motion.a
+				<span className='text-gray-600'>{t('noAccount')} </span>
+				<Link
 					href='/register'
-					className='text-blue-500 hover:text-blue-600 font-medium'
-					whileHover={{ scale: 1.1, color: '#2563eb' }}
-					whileTap={{ scale: 0.95 }}>
-					Sign Up
-				</motion.a>
+					className='text-blue-500 hover:text-blue-600 font-medium'>
+					{t('registerHere')}
+				</Link>
 			</motion.div>
 
 			{/* Forgot password link */}
@@ -123,13 +132,11 @@ export default function LoginPage() {
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				transition={{ delay: 0.9, duration: 0.5 }}>
-				<motion.a
+				<Link
 					href='#'
-					className='text-gray-400 hover:text-gray-600 text-sm'
-					whileHover={{ scale: 1.05, color: '#6b7280' }}
-					whileTap={{ scale: 0.95 }}>
-					forgot password?
-				</motion.a>
+					className='text-gray-400 hover:text-gray-600 text-sm'>
+					{t('forgotPassword')}
+				</Link>
 			</motion.div>
 		</motion.div>
 	);
