@@ -2,10 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { EnvelopeIcon, LockIcon } from '@/assets/icons';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+
+import logoKairon from '@/assets/images/logo-no-bg.png';
 
 export default function LoginPage() {
 	const t = useTranslations('auth');
@@ -24,24 +27,11 @@ export default function LoginPage() {
 
 			{/* Logo */}
 			<motion.div
-				className='flex justify-center mb-6'
+				className='flex justify-center'
 				initial={{ scale: 0 }}
 				animate={{ scale: 1 }}
 				transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}>
-				<motion.div
-					className='w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center'
-					whileHover={{ rotate: 360 }}
-					transition={{ duration: 0.6 }}>
-					<motion.div
-						className='w-6 h-6 bg-white rounded-full'
-						animate={{ scale: [1, 1.2, 1] }}
-						transition={{
-							duration: 2,
-							repeat: Infinity,
-							ease: 'easeInOut',
-						}}
-					/>
-				</motion.div>
+				<Image src={logoKairon} alt='logo' width={160} height={160} />
 			</motion.div>
 
 			{/* Title */}
@@ -102,7 +92,7 @@ export default function LoginPage() {
 				{/* Login button */}
 				<motion.button
 					type='submit'
-					className='w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200'
+					className='w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200'
 					initial={{ y: 20, opacity: 0 }}
 					animate={{ y: 0, opacity: 1 }}
 					transition={{ delay: 0.7, duration: 0.5 }}
@@ -121,7 +111,7 @@ export default function LoginPage() {
 				<span className='text-gray-600'>{t('noAccount')} </span>
 				<Link
 					href='/register'
-					className='text-blue-500 hover:text-blue-600 font-medium'>
+					className='text-primary hover:text-blue-600 font-medium'>
 					{t('registerHere')}
 				</Link>
 			</motion.div>
@@ -134,7 +124,7 @@ export default function LoginPage() {
 				transition={{ delay: 0.9, duration: 0.5 }}>
 				<Link
 					href='#'
-					className='text-gray-400 hover:text-gray-600 text-sm'>
+					className='text-primary hover:text-gray-600 text-sm'>
 					{t('forgotPassword')}
 				</Link>
 			</motion.div>

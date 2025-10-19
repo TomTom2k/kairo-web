@@ -31,5 +31,12 @@
 	"home": {
 		"title": "Trang chủ",
 		"description": "Chào mừng đến với ứng dụng của chúng tôi"
+	},
+	"errors": {
+		"400": "Yêu cầu không hợp lệ",
+		"401": "Chưa xác thực",
+		"403": "Bị cấm",
+		"404": "Không tìm thấy",
+		"500": "Lỗi máy chủ"
 	}
 }
