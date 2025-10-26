@@ -1,0 +1,10 @@
+{
+	"dashboard": {
+		"title": "Bảng điều khiển",
+		"welcome": "Chào mừng bạn đến với Dashboard!",
+		"loginSuccess": "Bạn đã đăng nhập thành công.",
+		"logout": "Đăng xuất",
+		"loading": "Đang tải...",
+		"unauthorized": "Không có quyền truy cập"
+	}
+}

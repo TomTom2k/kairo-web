@@ -1,0 +1,18 @@
+{
+	"errors": {
+		"400": {
+			"GENERAL": "Yêu cầu không hợp lệ",
+			"INVALID_EMAIL": "Định dạng email không hợp lệ",
+			"INVALID_PASSWORD": "Mật khẩu phải có ít nhất 8 ký tự",
+			"EMAIL_EXISTS": "Email đã tồn tại",
+			"INVALID_CREDENTIALS": "Email hoặc mật khẩu không đúng",
+			"VALIDATION_ERROR": "Lỗi xác thực"
+		},
+		"401": "Chưa xác thực",
+		"403": "Bị cấm",
+		"404": "Không tìm thấy",
+		"422": "Lỗi xác thực",
+		"500": "Lỗi máy chủ",
+		"UNKNOWN_ERROR": "Đã xảy ra lỗi không xác định"
+	}
+}

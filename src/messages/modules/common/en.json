@@ -1,0 +1,22 @@
+{
+	"common": {
+		"welcome": "Welcome",
+		"hello": "Hello",
+		"logout": "Logout",
+		"login": "Login",
+		"register": "Register",
+		"email": "Email",
+		"password": "Password",
+		"confirmPassword": "Confirm Password",
+		"username": "Username",
+		"submit": "Submit",
+		"cancel": "Cancel",
+		"save": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"search": "Search",
+		"loading": "Loading...",
+		"error": "Error",
+		"success": "Success"
+	}
+}

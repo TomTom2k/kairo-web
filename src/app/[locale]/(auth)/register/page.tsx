@@ -1,17 +1,64 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { EnvelopeIcon, LockIcon, UserIcon } from '@/assets/icons';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useAuthService } from '../hooks/useAuthService';
+import { registerSchema, RegisterFormData } from '@/schemas/auth.schema';
 import Image from 'next/image';
 import logoKairon from '@/assets/images/logo-no-bg.png';
+import { setCookie, COOKIE_NAMES } from '@/lib/cookies';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
 
 export default function RegisterPage() {
 	const t = useTranslations('auth');
 	const tCommon = useTranslations('common');
+	const { registerService } = useAuthService();
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<RegisterFormData>({
+		resolver: zodResolver(registerSchema),
+		defaultValues: {
+			name: 'Demo Kairo',
+			email: 'demo@kairo.com',
+			password: 'Demo@123',
+			confirmPassword: 'Demo@123',
+		},
+	});
+
+	const onSubmit = async (data: RegisterFormData) => {
+		try {
+			setIsLoading(true);
+			const response = await registerService(data);
+			console.log('Register successful:', response);
+
+			// Lưu token vào cookie
+			if (response.data?.access_token) {
+				setCookie(
+					COOKIE_NAMES.ACCESS_TOKEN,
+					response.data.access_token
+				);
+			}
+
+			// Redirect đến dashboard
+			router.push(ROUTES.DASHBOARD);
+		} catch (error) {
+			console.error('Registration failed:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	return (
 		<motion.div
@@ -47,7 +94,8 @@ export default function RegisterPage() {
 				className='space-y-6'
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ delay: 0.4, duration: 0.5 }}>
+				transition={{ delay: 0.4, duration: 0.5 }}
+				onSubmit={handleSubmit(onSubmit)}>
 				{/* Username field */}
 				<motion.div
 					className='relative'
@@ -62,10 +110,24 @@ export default function RegisterPage() {
 					<motion.input
 						type='text'
 						placeholder={tCommon('username')}
-						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
+						className={`text-gray-700 w-full pl-10 pr-4 py-3 border-0 border-b-2 focus:outline-none auth-input ${
+							errors.name
+								? 'border-red-500'
+								: 'border-gray-200 focus:border-blue-500'
+						}`}
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
+						{...register('name')}
 					/>
+					{errors.name && (
+						<motion.p
+							className='text-red-500 text-sm mt-1'
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.2 }}>
+							{errors.name.message}
+						</motion.p>
+					)}
 				</motion.div>
 
 				{/* Email field */}
@@ -82,10 +144,24 @@ export default function RegisterPage() {
 					<motion.input
 						type='email'
 						placeholder={tCommon('email')}
-						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
+						className={`text-gray-700 w-full pl-10 pr-4 py-3 border-0 border-b-2 focus:outline-none auth-input ${
+							errors.email
+								? 'border-red-500'
+								: 'border-gray-200 focus:border-blue-500'
+						}`}
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
+						{...register('email')}
 					/>
+					{errors.email && (
+						<motion.p
+							className='text-red-500 text-sm mt-1'
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.2 }}>
+							{errors.email.message}
+						</motion.p>
+					)}
 				</motion.div>
 
 				{/* Password field */}
@@ -102,22 +178,75 @@ export default function RegisterPage() {
 					<motion.input
 						type='password'
 						placeholder={tCommon('password')}
-						className='w-full pl-10 pr-4 py-3 border-0 border-b-2 border-gray-200 focus:border-blue-500 focus:outline-none text-gray-500 auth-input'
+						className={`text-gray-700 w-full pl-10 pr-4 py-3 border-0 border-b-2 focus:outline-none auth-input ${
+							errors.password
+								? 'border-red-500'
+								: 'border-gray-200 focus:border-blue-500'
+						}`}
 						whileFocus={{ scale: 1.02 }}
 						transition={{ duration: 0.2 }}
+						{...register('password')}
 					/>
+					{errors.password && (
+						<motion.p
+							className='text-red-500 text-sm mt-1'
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.2 }}>
+							{errors.password.message}
+						</motion.p>
+					)}
+				</motion.div>
+
+				{/* Confirm Password field */}
+				<motion.div
+					className='relative'
+					initial={{ x: -50, opacity: 0 }}
+					animate={{ x: 0, opacity: 1 }}
+					transition={{ delay: 0.8, duration: 0.5 }}>
+					<motion.div
+						className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'
+						whileHover={{ scale: 1.1 }}>
+						<LockIcon className='h-5 w-5 text-gray-400' />
+					</motion.div>
+					<motion.input
+						type='password'
+						placeholder={tCommon('confirmPassword')}
+						className={`text-gray-700 w-full pl-10 pr-4 py-3 border-0 border-b-2 focus:outline-none auth-input ${
+							errors.confirmPassword
+								? 'border-red-500'
+								: 'border-gray-200 focus:border-blue-500'
+						}`}
+						whileFocus={{ scale: 1.02 }}
+						transition={{ duration: 0.2 }}
+						{...register('confirmPassword')}
+					/>
+					{errors.confirmPassword && (
+						<motion.p
+							className='text-red-500 text-sm mt-1'
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.2 }}>
+							{errors.confirmPassword.message}
+						</motion.p>
+					)}
 				</motion.div>
 
 				{/* Register button */}
 				<motion.button
 					type='submit'
-					className='w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200'
+					disabled={isLoading}
+					className={`w-full text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 ${
+						isLoading
+							? 'bg-gray-400 cursor-not-allowed'
+							: 'bg-primary hover:bg-blue-600'
+					}`}
 					initial={{ y: 20, opacity: 0 }}
 					animate={{ y: 0, opacity: 1 }}
-					transition={{ delay: 0.8, duration: 0.5 }}
-					whileHover={{ scale: 1.05, y: -2 }}
-					whileTap={{ scale: 0.95 }}>
-					{tCommon('register')}
+					transition={{ delay: 0.9, duration: 0.5 }}
+					whileHover={!isLoading ? { scale: 1.05, y: -2 } : {}}
+					whileTap={!isLoading ? { scale: 0.95 } : {}}>
+					{isLoading ? 'Đang đăng ký...' : tCommon('register')}
 				</motion.button>
 			</motion.form>
 
@@ -126,7 +255,7 @@ export default function RegisterPage() {
 				className='text-center mt-6'
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ delay: 0.9, duration: 0.5 }}>
+				transition={{ delay: 1.0, duration: 0.5 }}>
 				<span className='text-gray-600'>{t('hasAccount')} </span>
 				<Link
 					href='/login'

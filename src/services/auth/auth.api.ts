@@ -10,17 +10,20 @@ type AuthApiType = {
 	) => Promise<RegisterApiType['response']>;
 };
 
+const REGISTER_URL = '/v1/auth/register';
+const LOGIN_URL = '/v1/auth/login';
+
 export const authApi: AuthApiType = {
 	login: async (payload) => {
 		const response = await axiosInstance.post<LoginApiType['response']>(
-			'/auth/login',
+			LOGIN_URL,
 			payload
 		);
 		return response.data;
 	},
 	register: async (payload) => {
 		const response = await axiosInstance.post<RegisterApiType['response']>(
-			'/auth/register',
+			REGISTER_URL,
 			payload
 		);
 		return response.data;

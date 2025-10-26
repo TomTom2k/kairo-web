@@ -1,0 +1,10 @@
+{
+	"dashboard": {
+		"title": "Dashboard",
+		"welcome": "Welcome to Dashboard!",
+		"loginSuccess": "You have successfully logged in.",
+		"logout": "Logout",
+		"loading": "Loading...",
+		"unauthorized": "Unauthorized"
+	}
+}

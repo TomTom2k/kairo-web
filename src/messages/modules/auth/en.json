@@ -1,0 +1,12 @@
+{
+	"auth": {
+		"loginTitle": "Login",
+		"registerTitle": "Create an account",
+		"forgotPassword": "Forgot password?",
+		"rememberMe": "Remember me",
+		"noAccount": "Don't have an account?",
+		"hasAccount": "Already have an account?",
+		"loginHere": "Login here",
+		"registerHere": "Register here"
+	}
+}

@@ -1,4 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { getCookie, COOKIE_NAMES } from './cookies';
+import { toast } from 'react-toastify';
+import { translateErrorMessage } from './errorTranslations';
 
 // Error response type từ backend
 interface ApiErrorResponse {
@@ -30,7 +33,7 @@ export class ApiError extends Error {
 
 // Tạo axios instance
 const axiosInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+	baseURL: process.env.API_URL || 'http://localhost:3001',
 	timeout: 10000,
 	headers: {
 		'Content-Type': 'application/json',
@@ -40,18 +43,16 @@ const axiosInstance = axios.create({
 // Request interceptor - thêm token và locale vào header
 axiosInstance.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		// Lấy token từ localStorage hoặc cookie
-		const token =
-			typeof window !== 'undefined'
-				? localStorage.getItem('access_token')
-				: null;
+		// Lấy token từ cookie
+		const token = getCookie(COOKIE_NAMES.ACCESS_TOKEN);
 
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 
 		// Lấy locale từ URL hoặc localStorage
-		const locale = getLocaleFromPath() || 'vi';
+		// Lấy locale từ URL
+		const locale = 'vi'; // Default locale
 		config.headers['Accept-Language'] = locale;
 
 		return config;
@@ -61,7 +62,7 @@ axiosInstance.interceptors.request.use(
 	}
 );
 
-// Response interceptor - xử lý lỗi với error_code
+// Response interceptor - xử lý lỗi với error_code và tự động hiển thị toast
 axiosInstance.interceptors.response.use(
 	(response: any) => {
 		return response;
@@ -78,80 +79,104 @@ axiosInstance.interceptors.response.use(
 				data.message
 			);
 
+			// Tự động hiển thị toast error
+			showToastError(apiError);
+
 			return Promise.reject(apiError);
 		} else if (error.request) {
 			// Request đã được gửi nhưng không nhận được response
 			const apiError = new ApiError('Network error', 0);
+
+			// Hiển thị toast cho network error
+			toast.error('Network error', {
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+			});
+
 			return Promise.reject(apiError);
 		} else {
 			// Lỗi khi setup request
 			const apiError = new ApiError(error.message, 0);
+
+			// Hiển thị toast cho setup error
+			toast.error(error.message, {
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+			});
+
 			return Promise.reject(apiError);
 		}
 	}
 );
 
-// Helper function để lấy locale từ URL path
-function getLocaleFromPath(): string | null {
-	if (typeof window === 'undefined') return null;
+// Helper function để hiển thị toast error tự động
+function showToastError(error: ApiError) {
+	let messageKey = '';
 
-	const pathname = window.location.pathname;
-	const localeMatch = pathname.match(/^\/(en|vi)(\/|$)/);
+	// Map specific error codes
+	switch (error.statusCode) {
+		case 400:
+			// Map 400 errors to specific messages
+			if (error.errorCode) {
+				// Try to get specific error message from translation
+				messageKey = `errors.400.${error.errorCode}`;
+			} else {
+				messageKey = 'errors.400.GENERAL';
+			}
+			break;
+		case 401:
+			messageKey = 'errors.401';
+			break;
+		case 403:
+			messageKey = 'errors.403';
+			break;
+		case 404:
+			messageKey = 'errors.404';
+			break;
+		case 422:
+			messageKey = 'errors.422';
+			break;
+		case 500:
+			messageKey = 'errors.500';
+			break;
+		default:
+			// For unknown errors, use original message
+			const originalMessage = Array.isArray(error.originalMessage)
+				? error.originalMessage[0]
+				: (error.originalMessage as string);
 
-	return localeMatch ? localeMatch[1] : null;
-}
-
-// Helper function để generate error_code từ status và error type
-function generateErrorCode(status: number, errorType?: string): string {
-	const errorMap: Record<number, string> = {
-		400: 'BAD_REQUEST',
-		401: 'UNAUTHORIZED',
-		403: 'FORBIDDEN',
-		404: 'NOT_FOUND',
-		409: 'CONFLICT',
-		422: 'VALIDATION_ERROR',
-		500: 'INTERNAL_SERVER_ERROR',
-		502: 'BAD_GATEWAY',
-		503: 'SERVICE_UNAVAILABLE',
-	};
-
-	// Nếu có error type cụ thể, kết hợp với status
-	if (errorType) {
-		return `${status}_${errorType.toUpperCase().replace(/\s+/g, '_')}`;
+			// Show toast error with translation
+			toast.error(originalMessage, {
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+			});
+			return;
 	}
 
-	return errorMap[status] || `HTTP_ERROR_${status}`;
-}
+	// Translate the message
+	const translatedMessage = translateErrorMessage(messageKey);
 
-// Helper function để get error message với translation
-export function getErrorMessage(
-	error: unknown,
-	translations: Record<string, any>
-): string {
-	if (error instanceof ApiError) {
-		const errorCode = error.errorCode;
-
-		if (errorCode && translations.errors?.[errorCode]) {
-			return translations.errors[errorCode];
-		}
-
-		// Fallback to status code based message
-		const statusKey = `${error.statusCode}`;
-		if (translations.errors?.[statusKey]) {
-			return translations.errors[statusKey];
-		}
-
-		// Fallback to original message
-		return Array.isArray(error.originalMessage)
-			? error.originalMessage[0]
-			: error.originalMessage;
-	}
-
-	if (error instanceof Error) {
-		return error.message;
-	}
-
-	return translations.errors?.UNKNOWN_ERROR || 'An unknown error occurred';
+	// Show toast error with translation
+	toast.error(translatedMessage, {
+		position: 'top-right',
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+	});
 }
 
 export default axiosInstance;
