@@ -6,7 +6,7 @@ import { ROUTES } from './constants/routes';
 const intlMiddleware = createMiddleware(routing);
 
 // Routes that don't require authentication
-const publicRoutes = [ROUTES.HOME, ROUTES.LOGIN, ROUTES.REGISTER];
+const publicRoutes = [ROUTES.HOME, ROUTES.LOGIN, ROUTES.REGISTER, '/test'];
 
 export default function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
