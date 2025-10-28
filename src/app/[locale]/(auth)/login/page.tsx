@@ -7,12 +7,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnvelopeIcon, LockIcon } from '@/assets/icons';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useAuthService } from '../hooks/useAuthService';
 import { loginSchema, LoginFormData } from '@/schemas/auth.schema';
 import { setCookie, COOKIE_NAMES } from '@/lib/cookies';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
 
 import logoKairon from '@/assets/images/logo-no-bg.png';

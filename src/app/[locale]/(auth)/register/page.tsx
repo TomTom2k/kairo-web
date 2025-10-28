@@ -6,14 +6,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnvelopeIcon, LockIcon, UserIcon } from '@/assets/icons';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useAuthService } from '../hooks/useAuthService';
 import { registerSchema, RegisterFormData } from '@/schemas/auth.schema';
 import Image from 'next/image';
 import logoKairon from '@/assets/images/logo-no-bg.png';
 import { setCookie, COOKIE_NAMES } from '@/lib/cookies';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
 
 export default function RegisterPage() {
