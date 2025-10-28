@@ -16,6 +16,7 @@ import { ROUTES } from "@/constants/routes";
 import { Link, useRouter } from "@/i18n/routing";
 import { setCookie, COOKIE_NAMES } from "@/lib/cookies";
 import { registerSchema, RegisterFormData } from "@/schemas/auth.schema";
+import { useAuth } from "@/hooks/useAuth";
 
 import { useAuthService } from "../hooks/useAuthService";
 
@@ -23,6 +24,7 @@ export default function RegisterPage() {
   const t = useTranslations("auth");
   const tCommon = useTranslations("common");
   const { registerService } = useAuthService();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -49,6 +51,8 @@ export default function RegisterPage() {
       // Lưu token vào cookie
       if (response.data?.access_token) {
         setCookie(COOKIE_NAMES.ACCESS_TOKEN, response.data.access_token);
+        // Update auth context
+        login(response.data.access_token);
       }
 
       // Redirect đến dashboard

@@ -7,6 +7,8 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
 import { ToastContainerComponent } from "@/components/ToastContainer";
+import { AuthInitializer } from "@/components/AuthInitializer";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -52,15 +54,19 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={normalizedLocale}>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <div className="w-full">
-              <Header />
-              {children}
-              <Footer />
-            </div>
-          </div>
-          <ToastContainerComponent />
+          <AuthProvider>
+            <AuthInitializer>
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <div className="w-full">
+                  <Header />
+                  {children}
+                  <Footer />
+                </div>
+              </div>
+              <ToastContainerComponent />
+            </AuthInitializer>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

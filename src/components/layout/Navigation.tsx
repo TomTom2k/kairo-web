@@ -9,7 +9,6 @@ import { Link } from "@/i18n/routing";
 
 const Navigation = () => {
   const pathname = usePathname();
-  console.log(pathname.split("/")[2]);
 
   const navItems = [
     { href: ROUTES.DASHBOARD, label: "Dashboard" },

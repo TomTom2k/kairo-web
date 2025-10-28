@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axiosConfig";
 
-import { LoginApiType, RegisterApiType } from "./type";
+import { LoginApiType, RegisterApiType, GetMeApiType } from "./type";
 
 type AuthApiType = {
   login: (
@@ -9,10 +9,12 @@ type AuthApiType = {
   register: (
     payload: RegisterApiType["request"]
   ) => Promise<RegisterApiType["response"]>;
+  getMe: () => Promise<GetMeApiType["response"]>;
 };
 
 const REGISTER_URL = "/v1/auth/register";
 const LOGIN_URL = "/v1/auth/login";
+const GET_ME_URL = "/v1/auth/me";
 
 export const authApi: AuthApiType = {
   login: async payload => {
@@ -27,6 +29,11 @@ export const authApi: AuthApiType = {
       REGISTER_URL,
       payload
     );
+    return response.data;
+  },
+  getMe: async () => {
+    const response =
+      await axiosInstance.get<GetMeApiType["response"]>(GET_ME_URL);
     return response.data;
   },
 };

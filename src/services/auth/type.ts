@@ -39,3 +39,16 @@ export interface RegisterResponseType {
     image?: string;
   };
 }
+
+export type GetMeApiType = IApi<void, ApiSuccessResponse<UserType>>;
+
+// ====== User Type ======
+export interface UserType {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
+}
