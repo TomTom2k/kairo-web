@@ -6,6 +6,7 @@ import { getMessages } from "next-intl/server";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
+import { ToastContainerComponent } from "@/components/ToastContainer";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -31,7 +32,12 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
+
+  // Ensure that the incoming `locale` is valid and normalize it
+  const normalizedLocale = routing.locales.includes(locale as any)
+    ? locale
+    : routing.defaultLocale;
+
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -41,11 +47,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={normalizedLocale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={normalizedLocale}>
           <div className="flex min-h-screen">
             <Sidebar />
             <div className="w-full">
@@ -54,6 +60,7 @@ export default async function LocaleLayout({
               <Footer />
             </div>
           </div>
+          <ToastContainerComponent />
         </NextIntlClientProvider>
       </body>
     </html>
